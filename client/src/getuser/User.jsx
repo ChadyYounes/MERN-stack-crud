@@ -3,6 +3,7 @@ import "./user.css";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const User = () => {
   const [users, setUsers] = useState([]);
@@ -25,13 +26,25 @@ const User = () => {
         toast.success(response.data.message, { position: "top-right" });
       });
   };
-
+  const removeCookie = (name) => {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+  };
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    removeCookie("access_token");
+    window.localStorage.removeItem("UserID");
+    navigate("/");
+  };
   return (
     <div className="userTable">
-      <Link to="/add" type="button" class="btn btn-primary">
-        Add User <i class="fa-solid fa-user-plus"></i>
-      </Link>
-
+      <div className="d-flex justify-content-between mb-3">
+        <Link to="/add" type="button" className="btn btn-primary">
+          Add User <i className="fa-solid fa-user-plus"></i>
+        </Link>
+        <button onClick={handleLogout} className="btn btn-danger">
+          Logout
+        </button>
+      </div>
       {users.length === 0 ? (
         <div className="text-center">
           <h4>No Data to show</h4>
@@ -62,7 +75,7 @@ const User = () => {
                       type="button"
                       className="btn btn-info mx-2"
                     >
-                      <i class="fa-solid fa-pen-to-square"></i>
+                      <i className="fa-solid fa-pen-to-square"></i>
                     </Link>
 
                     <button
@@ -70,7 +83,7 @@ const User = () => {
                       type="button"
                       className="btn btn-danger"
                     >
-                      <i class="fa-regular fa-trash-can"></i>
+                      <i className="fa-regular fa-trash-can"></i>
                     </button>
                   </td>
                 </tr>

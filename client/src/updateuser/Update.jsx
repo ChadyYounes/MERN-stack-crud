@@ -37,7 +37,7 @@ const Update = () => {
   }, [id]);
   return (
     <div className="addUser">
-      <Link to="/" type="button" class="btn btn-secondary mb-3">
+      <Link to="/users" type="button" class="btn btn-secondary mb-3">
         <i class="fa-solid fa-backward "></i> Back
       </Link>
 

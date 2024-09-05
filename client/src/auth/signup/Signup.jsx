@@ -1,39 +1,32 @@
-import { Link, useNavigate } from "react-router-dom";
-import "./addUser.css";
-import axios from "axios";
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import toast from "react-hot-toast";
-const AddUser = () => {
-  const [user, setUser] = useState({
+export default function Signup() {
+  const [admin, setAdmin] = useState({
     name: "",
     email: "",
-    address: "",
+    password: "",
   });
-  const navigate = useNavigate();
   function handleInput(e) {
     const { name, value } = e.target;
-    setUser({ ...user, [name]: value });
+    setAdmin({ ...admin, [name]: value });
+    console.log(admin);
   }
-
-  const postUser = async (e) => {
+  const navigate = useNavigate();
+  const onSubmit = async (e) => {
     e.preventDefault();
     await axios
-      .post("http://127.0.0.1:7000/api/user", user)
+      .post("http://127.0.0.1:7000/api/register", admin)
       .then((response) => {
         toast.success(response.data.message, { position: "top-right" });
-        navigate("/users");
-      })
-      .catch((error) => console.log(error));
+        navigate("/login");
+      });
   };
-
   return (
     <div className="addUser">
-      <Link to="/users" type="button" class="btn btn-secondary mb-3">
-        <i class="fa-solid fa-backward "></i> Back
-      </Link>
-
-      <h4>Add User Form</h4>
-      <form className="addUserForm" onSubmit={postUser}>
+      <h4>Register Admin Form</h4>
+      <form className="addUserForm" onSubmit={onSubmit}>
         <div className="inputGroup">
           <label htmlFor="name">Name: </label>
           <input
@@ -57,24 +50,26 @@ const AddUser = () => {
           ></input>
         </div>
         <div className="inputGroup">
-          <label htmlFor="address">Address: </label>
+          <label htmlFor="password">Password: </label>
           <input
-            type="text"
-            id="address"
-            name="address"
+            type="password"
+            id="password"
+            name="password"
             autoComplete="off"
-            placeholder="Enter your address"
+            placeholder="Enter your password"
             onChange={handleInput}
           ></input>
         </div>
+
         <div className="inputGroup>">
-          <button type="submit" class="btn btn-primary w-100  mt-2">
-            Submit
+          <div>
+            <Link to="/login">Already have an account?</Link>
+          </div>
+          <button type="submit" className="btn btn-primary w-100  mt-2">
+            Sign up{" "}
           </button>
         </div>
       </form>
     </div>
   );
-};
-
-export default AddUser;
+}
